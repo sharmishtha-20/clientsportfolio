@@ -185,6 +185,7 @@ export default function CTASection() {
             target="_blank"
             rel="noreferrer"
             className="cta-social-link hover-underline hover:text-black transition-colors"
+            data-cursor="BEHANCE"
           >
             BEHANCE ↗
           </a>

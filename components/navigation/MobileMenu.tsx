@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { NAV_ITEMS, ARTIST_DATA } from "@/data/content";
 
@@ -9,6 +10,17 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const containerVariants: Variants = {
     closed: {
       opacity: 0,
@@ -35,7 +47,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           animate="open"
           exit="closed"
           variants={containerVariants}
-          className="fixed inset-0 z-[9990] bg-[#111111] text-[#F5F4EF] flex flex-col justify-between p-6 sm:p-10 md:hidden"
+          className="fixed inset-0 z-[9990] bg-[#111111] text-[#F5F4EF] flex flex-col justify-between p-6 sm:p-10 md:hidden h-[100dvh] max-h-[100dvh] overflow-y-auto w-full"
         >
           {/* Header */}
           <div className="flex justify-between items-center border-b border-neutral-800 pb-4">

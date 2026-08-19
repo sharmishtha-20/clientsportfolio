@@ -9,7 +9,6 @@ import { MIND_CONTENT } from "@/data/content";
 export default function MindSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingLinesRef = useRef<HTMLDivElement>(null);
-  const textParagraphsRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -33,27 +32,6 @@ export default function MindSection() {
               trigger: headingLinesRef.current,
               start: "top 80%",
               end: "bottom 60%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
-      }
-
-      // 2. Paragraphs Fade & Slide
-      if (textParagraphsRef.current) {
-        const paras = textParagraphsRef.current.querySelectorAll("p");
-        gsap.fromTo(
-          paras,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.2,
-            duration: 1.0,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: textParagraphsRef.current,
-              start: "top 85%",
               toggleActions: "play none none reverse",
             },
           }
@@ -129,14 +107,6 @@ export default function MindSection() {
                   </span>
                 </div>
               ))}
-            </div>
-
-            {/* Editorial Bio / Philosophy Paragraphs */}
-            <div
-              ref={textParagraphsRef}
-              className="mt-16 sm:mt-20 max-w-2xl space-y-6 text-base sm:text-lg md:text-xl text-[#333333] font-light leading-relaxed border-l-2 border-[#111111] pl-6 sm:pl-8"
-            >
-
             </div>
           </div>
 

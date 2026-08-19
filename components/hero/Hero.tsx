@@ -214,7 +214,7 @@ export default function Hero() {
       <div className="relative z-20 pt-28 sm:pt-32" />
 
       {/* Bottom Area: Centered Scroll Prompt + Bottom Right Controls */}
-      <div className="relative z-20 px-6 sm:px-10 md:px-16 pb-10 sm:pb-14 w-full">
+      <div className="relative z-20 px-4 sm:px-10 md:px-16 pb-6 sm:pb-14 w-full flex flex-col items-center justify-end gap-5 sm:block">
         {/* Centered Scroll to Enter Cue */}
         <div
           ref={scrollIndicatorRef}
@@ -235,12 +235,12 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Bottom Right Corner: Video Controls (Play/Pause & Audio Mute/Unmute) */}
-        <div className="absolute right-6 sm:right-10 md:right-16 bottom-10 sm:pb-0 bottom-8 sm:bottom-10 flex items-center space-x-3 bg-black/70 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 shadow-2xl z-30">
+        {/* Video Controls (Play/Pause & Audio Mute/Unmute) */}
+        <div className="sm:absolute sm:right-10 md:right-16 sm:bottom-10 flex items-center space-x-2.5 sm:space-x-3 bg-black/70 backdrop-blur-md px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/20 shadow-2xl z-30">
           {/* Play / Pause Button */}
           <button
             onClick={togglePlay}
-            className="flex items-center space-x-1.5 text-[10px] font-mono tracking-widest uppercase text-neutral-200 hover:text-white transition-colors pr-2.5 border-r border-white/20"
+            className="flex items-center space-x-1.5 text-[10px] font-mono tracking-widest uppercase text-neutral-200 hover:text-white transition-colors pr-2 sm:pr-2.5 border-r border-white/20"
             aria-label={isPlaying ? "Pause Video" : "Play Video"}
             data-cursor="CLICK"
           >
@@ -251,7 +251,7 @@ export default function Hero() {
           {/* Audio Mute / Unmute Button */}
           <button
             onClick={toggleAudio}
-            className="flex items-center space-x-1.5 text-[10px] font-mono tracking-widest uppercase text-neutral-200 hover:text-white transition-colors pl-1"
+            className="flex items-center space-x-1.5 text-[10px] font-mono tracking-widest uppercase text-neutral-200 hover:text-white transition-colors pl-0.5 sm:pl-1"
             aria-label={isMuted ? "Unmute Audio" : "Mute Audio"}
             data-cursor="CLICK"
           >

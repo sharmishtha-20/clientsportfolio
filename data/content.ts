@@ -43,7 +43,7 @@ export const ARTIST_DATA: ArtistConfig = {
   drive: "https://drive.google.com/drive/folders/15lMitaO6g6YG80Sfic0nzpfRuymVy9pA",
   socials: {
     instagram: "https://www.instagram.com/nsr.exz?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==",
-    behance: "https://behance.net",
+    behance: "https://www.behance.net/nishchasinghr",
     linkedin: "",
     x: ""
   },

@@ -9,6 +9,9 @@ export default function PracticeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const pinContainerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const prevIndexRef = useRef(0);
+  const isInitialMount = useRef(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
 
@@ -33,7 +36,7 @@ export default function PracticeSection() {
           setActiveIndex(index);
         },
         onLeave: () => {
-          // Auto turn off audio & pause when leaving Section 03 downward
+          // Auto turn off audio & pause when leaving Section 02 downward
           setIsMuted(true);
           videoRefs.current.forEach((video) => {
             if (video) {
@@ -43,7 +46,7 @@ export default function PracticeSection() {
           });
         },
         onLeaveBack: () => {
-          // Auto turn off audio & pause when leaving Section 03 upward
+          // Auto turn off audio & pause when leaving Section 02 upward
           setIsMuted(true);
           videoRefs.current.forEach((video) => {
             if (video) {
@@ -68,6 +71,77 @@ export default function PracticeSection() {
     }, sectionRef);
 
     return () => ctx.revert();
+  }, [activeIndex]);
+
+  // Directional GSAP Video Transitions (Forward: Left out / Right in; Backward: Right out / Left in)
+  useEffect(() => {
+    const prevIndex = prevIndexRef.current;
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const slideOffset = isMobile ? 10 : 15; // subtle cinematic shift percentage
+
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      slideRefs.current.forEach((slide, idx) => {
+        if (!slide) return;
+        if (idx === activeIndex) {
+          gsap.set(slide, { opacity: 1, xPercent: 0, pointerEvents: "auto", zIndex: 2 });
+        } else {
+          gsap.set(slide, { opacity: 0, xPercent: slideOffset, pointerEvents: "none", zIndex: 1 });
+        }
+      });
+      return;
+    }
+
+    if (prevIndex === activeIndex) return;
+
+    const isForward = activeIndex > prevIndex;
+    const prevSlide = slideRefs.current[prevIndex];
+    const nextSlide = slideRefs.current[activeIndex];
+
+    // Animate current/leaving slide
+    if (prevSlide) {
+      gsap.to(prevSlide, {
+        xPercent: isForward ? -slideOffset : slideOffset,
+        opacity: 0,
+        duration: 0.75,
+        ease: "power2.out",
+        zIndex: 1,
+        pointerEvents: "none",
+      });
+    }
+
+    // Animate next/entering slide
+    if (nextSlide) {
+      gsap.fromTo(
+        nextSlide,
+        {
+          xPercent: isForward ? slideOffset : -slideOffset,
+          opacity: 0,
+          zIndex: 2,
+        },
+        {
+          xPercent: 0,
+          opacity: 1,
+          duration: 0.75,
+          ease: "power2.out",
+          pointerEvents: "auto",
+        }
+      );
+    }
+
+    // Hide any other non-active slides
+    slideRefs.current.forEach((slide, idx) => {
+      if (slide && idx !== prevIndex && idx !== activeIndex) {
+        gsap.set(slide, {
+          opacity: 0,
+          xPercent: isForward ? slideOffset : -slideOffset,
+          zIndex: 0,
+          pointerEvents: "none",
+        });
+      }
+    });
+
+    prevIndexRef.current = activeIndex;
   }, [activeIndex]);
 
   // Manage video autoplay, pause, and mute on index change
@@ -114,15 +188,15 @@ export default function PracticeSection() {
         className="w-full h-screen sticky top-0 flex flex-col justify-between p-6 sm:p-10 md:p-14 overflow-hidden select-none"
       >
         {/* Full-bleed Standout Dynamic Video Showcase */}
-        <div className="absolute inset-0 z-0 bg-[#000000]">
+        <div className="absolute inset-0 z-0 bg-[#000000] overflow-hidden">
           {PRACTICE_ITEMS.map((item, index) => {
-            const isActive = activeIndex === index;
             return (
               <div
                 key={item.id}
-                className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-                  isActive ? "opacity-100 scale-100" : "opacity-0 scale-105 pointer-events-none"
-                }`}
+                ref={(el) => {
+                  slideRefs.current[index] = el;
+                }}
+                className="absolute inset-0 will-change-transform overflow-hidden"
               >
                 <video
                   ref={(el) => {
@@ -219,7 +293,7 @@ export default function PracticeSection() {
         {/* Bottom Bar: Timeline Navigation + Audio Controls (Bottom Right Corner) */}
         <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3 border-t border-white/15 pt-4 backdrop-blur-[2px]">
           {/* Timeline Sequence Tabs */}
-          <div className="flex items-center space-x-4 sm:space-x-6 overflow-x-auto max-w-full pb-1 sm:pb-0">
+          <div className="flex items-center space-x-4 sm:space-x-6 overflow-x-auto no-scrollbar max-w-full pb-1 sm:pb-0">
             {PRACTICE_ITEMS.map((item, index) => {
               const isActive = activeIndex === index;
               return (

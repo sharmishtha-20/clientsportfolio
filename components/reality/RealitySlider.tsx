@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { REALITY_CONTENT } from "@/data/content";
 
 export default function RealitySlider() {
-  const [sliderPosition, setSliderPosition] = useState(50); // percentage
+  const [sliderPosition, setSliderPosition] = useState(50); // percentage 0 - 100
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMove = useCallback((clientX: number) => {
+  const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
@@ -17,43 +17,28 @@ export default function RealitySlider() {
     setSliderPosition(percentage);
   }, []);
 
-  const handleTouchMove = useCallback(
-    (e: TouchEvent) => {
-      if (!isDragging) return;
-      handleMove(e.touches[0].clientX);
-    },
-    [isDragging, handleMove]
-  );
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    e.currentTarget.setPointerCapture(e.pointerId);
+    updatePosition(e.clientX);
+  };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!isDragging) return;
-      handleMove(e.clientX);
-    },
-    [isDragging, handleMove]
-  );
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    updatePosition(e.clientX);
+  };
 
-  const handleMouseUp = useCallback(() => {
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     setIsDragging(false);
-  }, []);
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
-      window.addEventListener("touchmove", handleTouchMove);
-      window.addEventListener("touchend", handleMouseUp);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      // Ignored
     }
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleMouseUp);
-    };
-  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove]);
+  };
 
   return (
-    <div className="w-full max-w-2xl mx-auto my-12 select-none" data-cursor="DRAG">
+    <div className="w-full max-w-2xl mx-auto my-8 sm:my-12 select-none" data-cursor="DRAG">
       {/* Visual Instruction */}
       <div className="flex justify-between items-center text-xs font-mono tracking-widest text-neutral-400 uppercase mb-3">
         <span className="flex items-center space-x-2">
@@ -69,30 +54,34 @@ export default function RealitySlider() {
         </span>
       </div>
 
-      {/* Comparison Container */}
+      {/* Comparison Container with Pointer Events & Touch Pan-Y */}
       <div
         ref={containerRef}
-        onMouseDown={() => setIsDragging(true)}
-        onTouchStart={() => setIsDragging(true)}
-        className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-950 rounded-sm border border-neutral-800 shadow-2xl cursor-ew-resize"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        style={{ touchAction: "pan-y" }}
+        className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-950 rounded-sm border border-neutral-800 shadow-2xl cursor-ew-resize select-none"
       >
-        {/* Layer 1: Real Photograph (Background) */}
-        <div className="absolute inset-0 w-full h-full">
+        {/* Layer 1: Real Photograph (Stationary Background) */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none select-none">
           <Image
             src={REALITY_CONTENT.realImage}
             alt="Authentic 35mm photograph of the artist"
             fill
+            draggable={false}
             sizes="(max-width: 768px) 100vw, 700px"
-            className="object-cover object-top"
+            className="object-cover object-top pointer-events-none select-none"
           />
-          <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] font-mono tracking-widest text-emerald-400 uppercase rounded-sm border border-emerald-500/20">
+          <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] font-mono tracking-widest text-emerald-400 uppercase rounded-sm border border-emerald-500/20 pointer-events-none">
             AUTHENTIC FILM // REAL
           </div>
         </div>
 
-        {/* Layer 2: AI Generated Portrait (Clipped Foreground) */}
+        {/* Layer 2: AI Generated Portrait (Stationary Clipped Foreground Mask) */}
         <div
-          className="absolute inset-0 w-full h-full overflow-hidden will-change-[clip-path]"
+          className="absolute inset-0 w-full h-full overflow-hidden will-change-[clip-path] pointer-events-none select-none"
           style={{
             clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)`,
           }}
@@ -101,20 +90,21 @@ export default function RealitySlider() {
             src={REALITY_CONTENT.aiImage}
             alt="AI Generated portrait of the artist"
             fill
+            draggable={false}
             sizes="(max-width: 768px) 100vw, 700px"
-            className="object-cover object-top filter contrast-105"
+            className="object-cover object-top filter contrast-105 pointer-events-none select-none"
           />
-          <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] font-mono tracking-widest text-amber-400 uppercase rounded-sm border border-amber-500/20">
+          <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 text-[10px] font-mono tracking-widest text-amber-400 uppercase rounded-sm border border-amber-500/20 pointer-events-none">
             SYNTHETIC PERSONA // AI
           </div>
         </div>
 
-        {/* Dividing Handle */}
+        {/* Dividing Handle (Only the divider moves) */}
         <div
-          className="absolute top-0 bottom-0 w-[2px] bg-white pointer-events-none shadow-[0_0_12px_rgba(255,255,255,0.8)]"
+          className="absolute top-0 bottom-0 w-[2px] bg-white pointer-events-none shadow-[0_0_12px_rgba(255,255,255,0.8)] will-change-[left]"
           style={{ left: `${sliderPosition}%` }}
         >
-          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center shadow-lg font-mono text-[10px] font-bold">
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center shadow-lg font-mono text-[10px] font-bold pointer-events-none">
             ⟷
           </div>
         </div>
