@@ -241,44 +241,44 @@ export default function PracticeSection() {
           </div>
         </div>
 
-        {/* Left Corner Compact Info Overlay */}
-        <div className="relative z-10 my-auto sm:my-0 sm:mt-auto sm:mb-4 max-w-md">
+        {/* Left Corner Compact Info Overlay (Bottom-left pinned on mobile & desktop) */}
+        <div className="relative z-10 mt-auto mb-2 sm:mb-4 max-w-sm sm:max-w-md w-full">
           {PRACTICE_ITEMS.map((item, index) => {
             const isActive = activeIndex === index;
             return (
               <div
                 key={item.id}
-                className={`transition-all duration-700 ease-out backdrop-blur-md bg-black/45 border border-white/10 p-5 sm:p-6 rounded-2xl shadow-2xl ${
+                className={`transition-all duration-700 ease-out backdrop-blur-md bg-black/50 border border-white/10 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl shadow-2xl ${
                   isActive
                     ? "opacity-100 translate-y-0 relative pointer-events-auto"
-                    : "opacity-0 translate-y-6 absolute pointer-events-none"
+                    : "opacity-0 translate-y-4 sm:translate-y-6 absolute pointer-events-none"
                 }`}
               >
                 {/* Category & Live Indicator */}
-                <div className="flex items-center space-x-2.5 mb-2">
-                  <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                  <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.25em] uppercase text-neutral-300">
+                <div className="flex items-center space-x-2 sm:space-x-2.5 mb-1 sm:mb-2">
+                  <span className="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  <span className="text-[9px] sm:text-[11px] font-mono tracking-[0.2em] sm:tracking-[0.25em] uppercase text-neutral-300">
                     {item.subtitle}
                   </span>
                 </div>
 
                 {/* Video Title */}
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight uppercase text-[#F5F4EF] leading-tight">
+                <h2 className="text-base sm:text-2xl md:text-3xl font-light tracking-tight uppercase text-[#F5F4EF] leading-tight">
                   {item.title}
                 </h2>
 
                 {/* Short Impactful Description */}
-                <p className="mt-2 text-xs sm:text-sm text-neutral-300 font-light leading-relaxed">
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-neutral-300 font-light leading-relaxed line-clamp-2 sm:line-clamp-none">
                   {item.description}
                 </p>
 
                 {/* Minimal Specs */}
                 {item.details && item.details.length > 0 && (
-                  <div className="mt-3.5 flex flex-wrap gap-1.5">
+                  <div className="mt-2.5 sm:mt-3.5 flex flex-wrap gap-1 sm:gap-1.5">
                     {item.details.map((detail, idx) => (
                       <span
                         key={idx}
-                        className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-white/15 bg-black/50 text-neutral-300 backdrop-blur-sm"
+                        className="text-[8px] sm:text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border border-white/15 bg-black/50 text-neutral-300 backdrop-blur-sm"
                       >
                         {detail}
                       </span>
