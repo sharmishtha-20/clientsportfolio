@@ -91,9 +91,6 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </a>
             </div>
             <div className="flex flex-wrap gap-4 sm:gap-6 text-xs text-neutral-400 font-mono uppercase">
-              <a href={ARTIST_DATA.drive} target="_blank" rel="noreferrer" className="text-white hover:underline">
-                The Drive ↗
-              </a>
               <a href={ARTIST_DATA.socials.instagram} target="_blank" rel="noreferrer" className="hover:text-white">
                 Instagram
               </a>

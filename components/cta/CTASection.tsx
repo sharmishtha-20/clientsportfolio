@@ -163,15 +163,6 @@ export default function CTASection() {
             EMAIL ↗
           </a>
           <a
-            href={ARTIST_DATA.drive}
-            target="_blank"
-            rel="noreferrer"
-            className="cta-social-link hover-underline hover:text-black transition-colors font-medium"
-            data-cursor="DRIVE"
-          >
-            THE DRIVE ↗
-          </a>
-          <a
             href={ARTIST_DATA.socials.instagram}
             target="_blank"
             rel="noreferrer"

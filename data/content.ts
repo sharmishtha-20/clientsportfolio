@@ -96,7 +96,7 @@ export const MIND_CONTENT: MindConfig = {
     "From speculative world-building and narrative cinema to high-concept fashion visuals, my practice explores what happens when artificial intelligence is stripped of its gimmicks and elevated into a medium of pure aesthetic expression.",
   ],
   portrait: {
-    src: "/media/portraits/ai_portrait.jpg",
+    src: "/media/portraits/ai_portrait.png",
     alt: "AI Generated Portrait of NSR",
     caption: "SYNTHETIC DIRECTORIAL PERSONA // 2026",
   },
@@ -169,8 +169,8 @@ export const REALITY_CONTENT = {
     line2: "THE IMAGINATION",
     line3: "STILL BELONGS TO THE HUMAN.",
   },
-  aiImage: "/media/reality/ai_portrait.jpg",
-  realImage: "/media/reality/real_portrait.jpg",
+  aiImage: "/media/reality/ai_reality.jpg",
+  realImage: "/media/reality/real_reality.jpg",
 };
 
 export const CTA_CONTENT = {

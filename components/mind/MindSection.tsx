@@ -71,6 +71,26 @@ export default function MindSection() {
             },
           }
         );
+
+        // B&W to Color on scroll: Grayscale on enter, original color while in section, Grayscale on leave
+        const imgTag = imageRef.current.querySelector("img");
+        if (imgTag) {
+          gsap.fromTo(
+            imgTag,
+            { filter: "grayscale(100%) contrast(105%)" },
+            {
+              filter: "grayscale(0%) contrast(100%)",
+              duration: 1.2,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 65%",
+                end: "bottom 30%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+        }
       }
     }, sectionRef);
 
@@ -124,7 +144,7 @@ export default function MindSection() {
                     alt={MIND_CONTENT.portrait.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 33vw"
-                    className="object-cover object-top filter grayscale contrast-105 hover:grayscale-0 transition-all duration-700"
+                    className="object-cover object-top"
                   />
                 </div>
               </div>
